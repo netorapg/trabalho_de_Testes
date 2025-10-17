@@ -1,0 +1,5 @@
+com/example/api/model/User.class
+com/example/api/Application.class
+com/example/api/service/UserService.class
+com/example/api/repository/UserRepository.class
+com/example/api/controller/UserController.class
