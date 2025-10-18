@@ -19,15 +19,11 @@ WORKDIR /app
 # Copiar JAR da stage anterior
 COPY --from=build /build/target/*.jar app.jar
 
-# Expor porta
-EXPOSE 8080
+# Expor porta (Railway vai usar a variável PORT)
+EXPOSE ${PORT:-8080}
 
 # Variáveis de ambiente
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/users || exit 1
-
-# Executar
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Executar (Railway passa a porta via variável PORT)
+CMD ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"]
