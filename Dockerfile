@@ -19,11 +19,14 @@ WORKDIR /app
 # Copiar JAR da stage anterior
 COPY --from=build /build/target/*.jar app.jar
 
-# Expor porta (Railway vai usar a variável PORT)
-EXPOSE ${PORT:-8080}
+# Cloud Run fornece a variável PORT automaticamente
+ENV PORT=8080
 
 # Variáveis de ambiente
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
-# Executar (Railway passa a porta via variável PORT)
-CMD ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"]
+# Expor porta
+EXPOSE 8080
+
+# Executar (Cloud Run passa a porta via variável $PORT)
+CMD ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT} -jar app.jar"]
